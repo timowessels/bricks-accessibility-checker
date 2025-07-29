@@ -75,14 +75,14 @@ class Bricks_Accessibility_Checker {
     }
     // [END:SETTINGS]
     
-    // [SECTION:MODULES] Starts plugin features
-    public function init_modules() {
-        // Start Alt Text Editor if enabled
-        if ($this->settings['enable_alt_text_editor'] && class_exists('BAC_Alt_Text_Editor')) {
-            $this->alt_text_editor = new BAC_Alt_Text_Editor();
-        }
+// [SECTION:MODULES] Starts plugin features
+public function init_modules() {
+    // Start Alt Text Editor only if enabled in settings
+    if ($this->settings['enable_alt_text_editor'] && class_exists('BAC_Alt_Text_Editor')) {
+        $this->alt_text_editor = new BAC_Alt_Text_Editor();
     }
-    // [END:MODULES]
+}
+// [END:MODULES]
     
     // [SECTION:ADMIN_SCRIPTS] Loads CSS for admin page
     public function admin_enqueue_scripts($hook) {
