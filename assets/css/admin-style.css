@@ -1,4 +1,4 @@
-/* Toggle Switch */
+/* [SECTION:TOGGLE_SWITCH] Creates on/off toggle switches */
 .bac-switch {
   position: relative;
   display: inline-block;
@@ -47,8 +47,9 @@ input:focus + .bac-slider {
 input:checked + .bac-slider:before {
   transform: translateX(26px);
 }
+/* [END:TOGGLE_SWITCH] */
 
-/* Admin page styles */
+/* [SECTION:ADMIN_CONTAINER] Admin page container styling */
 .bac-admin-container {
   margin-top: 20px;
   background: #fff;
@@ -56,17 +57,4 @@ input:checked + .bac-slider:before {
   border-radius: 5px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
-
-.form-table th {
-  width: 250px;
-}
-
-.bac-section {
-  margin-bottom: 30px;
-}
-
-.bac-section-title {
-  border-bottom: 1px solid #eee;
-  padding-bottom: 10px;
-  margin-bottom: 15px;
-}
+/* [END:ADMIN_CONTAINER] */
