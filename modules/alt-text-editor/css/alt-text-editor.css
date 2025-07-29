@@ -1,1 +1,88 @@
+/* [SECTION:HIGHLIGHT] Highlight images missing alt text */
+.bac-missing-alt {
+    border: 2px solid #ff0000 !important;
+}
 
+/* [SECTION:EDIT_BUTTON] Style the edit button */
+.bac-edit-alt-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #007cba;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    z-index: 100;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+/* Show button on hover */
+img.bac-missing-alt:hover + .bac-edit-alt-button,
+.bac-edit-alt-button:hover {
+    opacity: 1;
+}
+
+/* [SECTION:FORM] Style the edit form */
+.bac-alt-text-form {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 101;
+    width: 250px;
+}
+
+.bac-alt-text-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.bac-alt-text-input {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+.bac-alt-text-buttons {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.bac-alt-text-save,
+.bac-alt-text-cancel {
+    padding: 5px 10px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.bac-alt-text-save {
+    background-color: #007cba;
+    color: white;
+    border: none;
+}
+
+.bac-alt-text-cancel {
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+}
+
+/* [SECTION:SUCCESS] Style success message */
+.bac-alt-text-success {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #46b450;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    z-index: 101;
+}
