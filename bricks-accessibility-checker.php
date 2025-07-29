@@ -7,60 +7,39 @@
  * Text Domain: bricks-accessibility-checker
  */
 
-// Exit if accessed directly
+// [SECTION:SECURITY] Keeps the file secure
 if (!defined('ABSPATH')) {
     exit;
 }
+// [END:SECURITY]
 
-// Define plugin constants
+// [SECTION:CONSTANTS] Important plugin information
 define('BAC_VERSION', '1.0.0');
 define('BAC_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('BAC_PLUGIN_URL', plugin_dir_url(__FILE__));
+// [END:CONSTANTS]
 
-// Load required files
+// [SECTION:INCLUDES] Loads the alt-text editor file
+// We only include files that actually exist
 require_once BAC_PLUGIN_DIR . 'modules/alt-text-editor/class-alt-text-editor.php';
-require_once BAC_PLUGIN_DIR . 'modules/scanner/class-content-retriever.php';
-require_once BAC_PLUGIN_DIR . 'modules/scanner/scanners/class-abstract-scanner.php';
-require_once BAC_PLUGIN_DIR . 'modules/scanner/scanners/class-alt-text-scanner.php';
-require_once BAC_PLUGIN_DIR . 'modules/scanner/scanners/class-aria-scanner.php';
-require_once BAC_PLUGIN_DIR . 'modules/scanner/scanners/class-color-contrast-scanner.php';
-require_once BAC_PLUGIN_DIR . 'modules/scanner/scanners/class-heading-scanner.php';
-require_once BAC_PLUGIN_DIR . 'modules/scanner/class-scanner.php';
-require_once BAC_PLUGIN_DIR . 'modules/scanner/class-scanner-ajax.php';
+// [END:INCLUDES]
 
-/**
- * Main plugin class
- */
+// [SECTION:MAIN_CLASS] Main plugin controller
 class Bricks_Accessibility_Checker {
-    /**
-     * Plugin instance
-     */
     private static $instance = null;
-    
-    /**
-     * Module instances
-     */
     public $alt_text_editor;
-    public $scanner_ajax;
-    
-    /**
-     * Plugin settings
-     */
     private $settings = array();
     
-    /**
-     * Get plugin instance
-     */
+    // [SECTION:SINGLETON] Creates only one plugin instance
     public static function get_instance() {
         if (null === self::$instance) {
             self::$instance = new self();
         }
         return self::$instance;
     }
+    // [END:SINGLETON]
     
-    /**
-     * Constructor
-     */
+    // [SECTION:CONSTRUCTOR] Sets up the plugin when it starts
     private function __construct() {
         // Load settings
         $this->load_settings();
@@ -75,59 +54,37 @@ class Bricks_Accessibility_Checker {
             add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
         }
     }
+    // [END:CONSTRUCTOR]
     
-    /**
-     * Load settings from database
-     */
+    // [SECTION:SETTINGS] Handles plugin settings
     private function load_settings() {
+        // Default settings if nothing is saved yet
         $default_settings = array(
-            'enable_alt_text_editor' => 1, // Enabled by default
+            'enable_alt_text_editor' => 1, // 1 = enabled, 0 = disabled
         );
         
+        // Get any saved settings from the database
         $saved_settings = get_option('bac_settings', array());
+        
+        // Combine saved settings with defaults
         $this->settings = wp_parse_args($saved_settings, $default_settings);
     }
     
-    /**
-     * Initialize modules
-     */
-    public function init_modules() {
-        // Initialize Alt Text Editor if enabled and class exists
-        if ($this->settings['enable_alt_text_editor'] && class_exists('BAC_Alt_Text_Editor')) {
-            $this->alt_text_editor = new BAC_Alt_Text_Editor();
-        }
-        
-        // Initialize Scanner AJAX handler if class exists
-        if (class_exists('BAC_Scanner_AJAX')) {
-            $this->scanner_ajax = new BAC_Scanner_AJAX();
-        }
-    }
-    
-    /**
-     * Add admin menu
-     */
-    public function add_admin_menu() {
-        add_menu_page(
-            __('Bricks Accessibility', 'bricks-accessibility-checker'),
-            __('Bricks A11y', 'bricks-accessibility-checker'),
-            'manage_options',
-            'bricks-accessibility',
-            array($this, 'render_admin_page'),
-            'dashicons-universal-access',
-            100
-        );
-    }
-    
-    /**
-     * Register settings
-     */
     public function register_settings() {
         register_setting('bac_settings_group', 'bac_settings');
     }
+    // [END:SETTINGS]
     
-    /**
-     * Enqueue admin scripts and styles
-     */
+    // [SECTION:MODULES] Starts plugin features
+    public function init_modules() {
+        // Start Alt Text Editor if enabled
+        if ($this->settings['enable_alt_text_editor'] && class_exists('BAC_Alt_Text_Editor')) {
+            $this->alt_text_editor = new BAC_Alt_Text_Editor();
+        }
+    }
+    // [END:MODULES]
+    
+    // [SECTION:ADMIN_SCRIPTS] Loads CSS for admin page
     public function admin_enqueue_scripts($hook) {
         // Only load on our plugin page
         if ($hook !== 'toplevel_page_bricks-accessibility') {
@@ -142,10 +99,23 @@ class Bricks_Accessibility_Checker {
             BAC_VERSION
         );
     }
+    // [END:ADMIN_SCRIPTS]
     
-    /**
-     * Render admin page
-     */
+    // [SECTION:ADMIN_MENU] Creates admin menu item
+    public function add_admin_menu() {
+        add_menu_page(
+            __('Bricks Accessibility', 'bricks-accessibility-checker'),
+            __('Bricks A11y', 'bricks-accessibility-checker'),
+            'manage_options',
+            'bricks-accessibility',
+            array($this, 'render_admin_page'),
+            'dashicons-universal-access',
+            100
+        );
+    }
+    // [END:ADMIN_MENU]
+    
+    // [SECTION:ADMIN_PAGE] Creates settings page with toggles
     public function render_admin_page() {
         // Check user capabilities
         if (!current_user_can('manage_options')) {
@@ -177,12 +147,15 @@ class Bricks_Accessibility_Checker {
         </div>
         <?php
     }
+    // [END:ADMIN_PAGE]
 }
+// [END:MAIN_CLASS]
 
-// Initialize the plugin
+// [SECTION:INITIALIZATION] Starts the plugin
 function bricks_accessibility_checker() {
     return Bricks_Accessibility_Checker::get_instance();
 }
 
 // Start the plugin
 add_action('plugins_loaded', 'bricks_accessibility_checker');
+// [END:INITIALIZATION]
